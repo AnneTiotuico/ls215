@@ -78,9 +78,8 @@ log the number of words in that sentence
 //   console.log(`The longest sentence has ${longestWordCount} words.`);
 // }
 
-/*
-could we use filter and pass in a cb function that gets all the lengths then get the max?
-*/
+// or using the regex to get the cleaned sentences and get sentence length
+// instead of joining in the cleanedSentence and splitting in sentenceLengths
 
 function longestSentence(text) {
   let sentences = text.match(/\b[^.!?]+[.!?]/g);
