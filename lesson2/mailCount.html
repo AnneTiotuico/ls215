@@ -1,0 +1,70 @@
+<script src="//dbdwvr6p7sskw.cloudfront.net/210/files/email_data_v2.js"></script>
+<script>
+"use strict";
+
+/*
+problem:
+given a string of email data, return the number of email messages and the date range
+input-string
+output-logged message strings
+rules:
+-email messages are delimited by '##||##'
+-each message has 5 parts delimited by '#/#'
+-five parts are:
+  sender
+  subject
+  date
+  recipient
+  body
+they occur in that order
+
+goal:
+-get the number of email messages (5 emails)
+-get the date range (Sat Jun 25 2016 - Thu Aug 11 2016)
+
+notes:
+the emails don't appear in chronological order
+dates are in mm-dd-yyyy order
+
+let date = new Date('06-25-2016')
+console.log(date.toDateString()); // Sat Jun 25 2016
+
+algorithm:
+get all the dates and save into an array
+const regexp = /(\d{2}-\d{2}-\d{4})/g;
+console.log(emailData.match(regexp))
+get length of array to get # of emails
+
+using the dates array, get the min and max
+by converting the dates to their
+
+*/
+
+  // function mailCount(emailData) {
+  //   let dates = emailData.match(/(\d{2}-\d{2}-\d{4})/g).sort();
+  //   let start = new Date(dates[0]).toDateString();
+  //   let end = new Date(dates.slice(-1)).toDateString();
+
+  //   console.log(`Count of Email: ${dates.length}`);
+  //   console.log(`Date Range: ${start} - ${end}`);
+  // }
+
+  //or, splitting on email delimiter instead:
+
+  function mailCount(emailData) {
+    let emails = emailData.split('##||##');
+    let dates = emailData.match(/(\d{2}-\d{2}-\d{4})/g).sort();
+    let start = new Date(dates[0]).toDateString();
+    let end = new Date(dates.slice(-1)).toDateString();
+
+    console.log(`Count of Email: ${emails.length}`);
+    console.log(`Date Range: ${start} - ${end}`);
+  }
+
+  mailCount(emailData);
+
+  // console output
+
+  // Count of Email: 5
+  // Date Range: Sat Jun 25 2016 - Thu Aug 11 2016
+</script>
