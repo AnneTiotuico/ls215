@@ -1,5 +1,7 @@
 // Problem Description
-// You are given a list of numbers in a "short-hand" range where only the significant part of the next number is written because we know the numbers are always increasing (ex. "1, 3, 7, 2, 4, 1" represents [1, 3, 7, 12, 14, 21]). Some people use different separators for their ranges
+// You are given a list of numbers in a "short-hand" range where only
+// the significant part of the next number is written because we know the
+// numbers are always increasing (ex. "1, 3, 7, 2, 4, 1" represents [1, 3, 7, 12, 14, 21]). Some people use different separators for their ranges
 // (ex. "1-3, 1-2", "1:3, 1:2", "1..3, 1..2" represent the same numbers [1, 2, 3, 11, 12]). Range limits are always inclusive.
 
 // Your job is to return a list of complete numbers.
@@ -256,14 +258,13 @@ function longHand(strNum) {
 }
 
 
-
 // happy paths:
-console.log(longHand('1, 3, 7, 2, 4, 1').values === [1, 3, 7, 12, 14, 21].values);  // [1, 3, 7, 12, 14, 21]
-console.log(longHand('1, 3, 7, 2, 4, 1, 1').values === [1, 3, 7, 12, 14, 21, 31].values);  // [1, 3, 7, 12, 14, 21, 31]
-console.log(longHand('1-3').values === [1, 2, 3].values);               // [1, 2, 3]
-console.log(longHand('1-3, 1-2').values === [1, 2, 3, 11, 12].values);          // [1, 2, 3, 11, 12]
-console.log(longHand('1:3, 1:2').values === [1, 2, 3, 11, 12].values);          // [1, 2, 3, 11, 12]
-console.log(longHand('1..3, 1..2').values === [1, 2, 3, 11, 12].values);        // [1, 2, 3, 11, 12]
+console.log(longHand('1, 3, 7, 2, 4, 1'));  // [1, 3, 7, 12, 14, 21]
+console.log(longHand('1, 3, 7, 2, 4, 1, 1'));  // [1, 3, 7, 12, 14, 21, 31]
+console.log(longHand('1-3'));               // [1, 2, 3]
+console.log(longHand('1-3, 1-2'));          // [1, 2, 3, 11, 12]
+console.log(longHand('1:3, 1:2'));          // [1, 2, 3, 11, 12]
+console.log(longHand('1..3, 1..2'));        // [1, 2, 3, 11, 12]
 // console.log(longHand('2-1-3'));             // [2, 3, ... 11, 12, 13]
 // console.log(longHand('1:5:2') );             // [ 1,  2, 3, 4,  5, 6 ... 12]
 // console.log(longHand('4, 2-1')  );            // [4, 12, 13, .. 21]
