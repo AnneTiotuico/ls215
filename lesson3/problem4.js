@@ -187,17 +187,6 @@ function invalidInput(value) {
   return (typeof value !== 'string' || !/^([0-9]+(-|:|, |\.\.|))+$/.test(value.trim()) || value.length < 1);
 }
 
-function longHand(strNum) {
-  if (invalidInput(strNum)) return [];
-  let nums = strNum.split(', ');
-  return nums.reduce((result, num) => {
-    let previousNum = result.slice(-1)[0];
-    if (/-|:|\.\./.test(num)) return result.concat(isRange(num, previousNum));
-    if (Number(num) < Number(previousNum)) return result.concat(prependNum(num, previousNum));
-    return result.concat(num);
-  }, []).map(Number);
-}
-
 function prependNum(num, previous) {
   let prepend;
   if (previous.length > 1) {
@@ -218,6 +207,7 @@ function isRange(num, previous) {
       return result.concat(expandSingleRange(range, result.slice(-1)));
     }, []);
   }
+
   return expandSingleRange(num.split(/[-:.]+/g), previous);
 }
 
@@ -242,6 +232,7 @@ function expandSingleRange(range, previous) {
   if (Number(firstNum) <= Number(previous)) {
     firstNum = prependNum(firstNum, previous);
   }
+
   expanded.push(firstNum);
 
   let sum = Number(expanded.slice(-1)[0]);
@@ -251,6 +242,17 @@ function expandSingleRange(range, previous) {
   }
 
   return expanded;
+}
+
+function longHand(strNum) {
+  if (invalidInput(strNum)) return [];
+  let nums = strNum.split(', ');
+  return nums.reduce((result, num) => {
+    let previousNum = result.slice(-1)[0];
+    if (/-|:|\.\./.test(num)) return result.concat(isRange(num, previousNum));
+    if (Number(num) < Number(previousNum)) return result.concat(prependNum(num, previousNum));
+    return result.concat(num);
+  }, []).map(Number);
 }
 
 
