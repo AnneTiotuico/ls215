@@ -209,10 +209,7 @@ function railCipherEncode(msg, rows) {
   if (letters.length < 2) return 'Invalid Input';
 
   let row = 0;
-  let resultRows = [];
-  for (let count = 1; count <= rows; count++) {
-    resultRows.push([]);
-  }
+  let resultRows = Array(rows).fill().map(row => []);
 
   let directionUp = false;
   letters.forEach((letter) => {
