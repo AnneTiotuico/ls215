@@ -230,16 +230,16 @@ function railCipherEncode(msg, rows) {
 }
 
 
-console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 2));
+// console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 2));
 // W . A . E . I . C . V . R . D . L . E . T . N . E
 // . E . R . D . S . O . E . E . F . E . A . O . C .
 
-console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 3));
+// console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 3));
 // W . . . E . . . C . . . R . . . L . . . T . . . E
 // . E . R . D . S . O . E . E . F . E . A . O . C .
 // . . A . . . I . . . V . . . D . . . E . . . N . .
 
-console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 4));
+// console.log(railCipherEncode('WE ARE DISCOVERED FLEE AT ONCE', 4));
 // W	.	.	.	.	.	I	.	.	.	.	.	R	.	.	.	.	.	E	.	.	.	.	.	E
 // .	E	.	.	.	D	.	S	.	.	.	E	.	E	.	.	.	E	.	A	.	.	.	C	.
 // .	.	A	.	E	.	.	.	C	.	V	.	.	.	D	.	L	.	.	.	T	.	N	.	.
@@ -348,6 +348,7 @@ algorithm:
       - directionup should be true
 */
 
+
 function invalidDecodeInput(msg, rows) {
   return typeof msg !== 'string' || /[^a-z]+/gi.exec(msg) || rows < 2;
 }
@@ -363,8 +364,8 @@ function railCipherDecode(msg, rows) {
   let letters = msg.split('');
   let length = letters.length;
 
-  let firstRowLetterCount = rows > 2 ? Math.round(length/rows) - 1 : Math.round(length/rows);
-  let lastRowLetterCount = firstRowLetterCount - 1;
+  let firstRowLetterCount = Math.ceil(length / ((rows - 1) * 2))
+  let lastRowLetterCount = Math.floor(length / ((rows - 1) * 2))
 
   for (let count = 1; count <= firstRowLetterCount; count++) {
     resultRows[0].push(letters.shift());
@@ -373,6 +374,7 @@ function railCipherDecode(msg, rows) {
   for (let count = 1; count <= lastRowLetterCount; count++) {
     resultRows[rows - 1].unshift(letters.pop());
   }
+
 
   let remainingLength = letters.length;
   let remainingRows = rows - 2;
@@ -401,27 +403,43 @@ function railCipherDecode(msg, rows) {
   return decoded;
 }
 
+
 // console.log(railCipherDecode('WECRLTEERDSOEEFEAOCAIVDEN', 3)); // 'WEAREDISCOVEREDFLEEATONCE'
 // 1st row WECRLTE 7 letters
 // 2nd row ERDSOEEFEAOC 12 letters
 // 3rd row AIVDEN 6 letters
 
-// console.log(railCipherDecode('WAEICVRDLETNEERDSOEEFEAOC', 2)); // 'WEAREDISCOVEREDFLEEATONCE'
-// console.log(railCipherDecode('WECRLTEERDSOEEFEAOCAIVDEN', 3)); // 'WEAREDISCOVEREDFLEEATONCE'
-// console.log(railCipherDecode('WIREEEDSEEEACAECVDLTNROFO', 4)); // 'WEAREDISCOVEREDFLEEATONCE'
-// console.log(railCipherDecode('WCLEESOFECAIVDENRDEEAOERT', 5)); // 'WEAREDISCOVEREDFLEEATONCE'
-// console.log(railCipherDecode('WVTEOEAOACRENRSEECEIDLEDF', 6)); // 'WEAREDISCOVEREDFLEEATONCE'
+console.log(railCipherDecode('WAEICVRDLETNEERDSOEEFEAOC', 2) === 'WEAREDISCOVEREDFLEEATONCE');
+console.log(railCipherDecode('WECRLTEERDSOEEFEAOCAIVDEN', 3) === 'WEAREDISCOVEREDFLEEATONCE');
+console.log(railCipherDecode('WIREEEDSEEEACAECVDLTNROFO', 4) === 'WEAREDISCOVEREDFLEEATONCE');
+console.log(railCipherDecode('WCLEESOFECAIVDENRDEEAOERT', 5) === 'WEAREDISCOVEREDFLEEATONCE');
+console.log(railCipherDecode('WVTEOEAOACRENRSEECEIDLEDF', 6) === 'WEAREDISCOVEREDFLEEATONCE');
 
-// console.log(railCipherDecode('hloel', 2)); // hello
-// console.log(railCipherDecode('m', 5));     // 'Invalid Input'
-// console.log(railCipherDecode('moon', 1));  // 'Invalid Input'
-// console.log(railCipherDecode('m153', 5));  // 'Invalid Input'
+console.log(railCipherDecode('hloel', 2) === 'hello');
+console.log(railCipherDecode('moon', 2) === 'moon');
+console.log(railCipherDecode('m', 5) === 'Invalid Input');
+console.log(railCipherDecode('moon', 1) === 'Invalid Input');
+console.log(railCipherDecode('m153', 5) === 'Invalid Input');
+
+console.log(railCipherDecode('WCLEESOFECAIVDENRDEEAOERT', 5) === "WEAREDISCOVEREDFLEEATONCE");
+console.log(railCipherDecode('WECRLTEERDSOEEFEAOCAIVDEN', 3) === 'WEAREDISCOVEREDFLEEATONCE');
+console.log(railCipherDecode('XXXXXXXXXOOOOOOOOO', 2)  === 'XOXOXOXOXOXOXOXOXO');
+console.log(railCipherDecode('TEITELHDVLSNHDTISEIIEA', 3) === 'THEDEVILISINTHEDETAILS');
+
+console.log(railCipherDecode('CYTRPO', 2) === 'CRYPTO');
+console.log(railCipherDecode('mono', 3) === 'moon');
+console.log(railCipherDecode('moon', 5) === 'moon');
+
+
+console.log(railCipherDecode('CTRPOY', 3)  === 'CRYPTO');
+console.log(railCipherDecode('CROYTP', 4)  === 'CRYPTO');
+console.log(railCipherDecode('sikrtce', 2)  === 'sticker');
+console.log(railCipherDecode('hoell', 3) === 'hello');
+console.log(railCipherDecode('srteikc', 4)  === 'sticker');
 
 // couldn't pass
-// console.log(railCipherDecode('hoell', 3)); // hello
-// console.log(railCipherDecode('helol', 4)); // hello
-// console.log(railCipherDecode('hello', 5)); // hello
-// console.log(railCipherDecode('moon', 2));  // moon
-// console.log(railCipherDecode('mono', 3));  // moon
-// console.log(railCipherDecode('moon', 4));  // moon
-// console.log(railCipherDecode('moon', 5));  // moon
+
+console.log(railCipherDecode('helol', 4));
+console.log(railCipherDecode('hello', 5));
+console.log(railCipherDecode('moon', 4));
+console.log(railCipherDecode('sktceir', 3) )// === 'sticker');
