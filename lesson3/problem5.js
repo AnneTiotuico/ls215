@@ -348,60 +348,90 @@ algorithm:
       - directionup should be true
 */
 
+// didn't work for all cases:
+// function invalidDecodeInput(msg, rows) {
+//   return typeof msg !== 'string' || /[^a-z]+/gi.exec(msg) || rows < 2;
+// }
+
+// function railCipherDecode(msg, rows) {
+//   if (invalidDecodeInput(msg, rows) || msg.length < 2) return 'Invalid Input';
+
+//   let resultRows = [];
+//   for (let count = 1; count <= rows; count++) {
+//     resultRows.push([]);
+//   }
+
+//   let letters = msg.split('');
+//   let length = letters.length;
+
+//   let firstRowLetterCount = Math.ceil(length / ((rows - 1) * 2))
+//   let lastRowLetterCount = Math.floor(length / ((rows - 1) * 2))
+
+//   for (let count = 1; count <= firstRowLetterCount; count++) {
+//     resultRows[0].push(letters.shift());
+//   }
+
+//   for (let count = 1; count <= lastRowLetterCount; count++) {
+//     resultRows[rows - 1].unshift(letters.pop());
+//   }
+
+
+//   let remainingLength = letters.length;
+//   let remainingRows = rows - 2;
+//   let lettersPerRow = remainingLength / remainingRows;
+
+//   for (let row = 1; row < rows - 1; row++) {
+//     resultRows[row] = letters.splice(0, lettersPerRow);
+//   }
+
+//   let row = 0;
+//   let directionUp = false;
+
+//   let decoded =  msg.split('').map((letter) => {
+//     let currentLetter = resultRows[row].shift();
+
+//     directionUp ? row -= 1 : row += 1;
+//     if (row === 0) {
+//       directionUp = false;
+//     } else if (row === rows - 1) {
+//       directionUp = true;
+//     }
+
+//     return currentLetter;
+//   }).join('');
+
+//   return decoded;
+// }
+
 
 function invalidDecodeInput(msg, rows) {
   return typeof msg !== 'string' || /[^a-z]+/gi.exec(msg) || rows < 2;
 }
 
-function railCipherDecode(msg, rows) {
-  if (invalidDecodeInput(msg, rows) || msg.length < 2) return 'Invalid Input';
+function railCipherDecode(msg, rails) {
+  if (invalidDecodeInput(msg, rails) || msg.length < 2) return 'Invalid Input';
 
-  let resultRows = [];
-  for (let count = 1; count <= rows; count++) {
-    resultRows.push([]);
-  }
-
+  let length = msg.length;
   let letters = msg.split('');
-  let length = letters.length;
+  let indexes = Array(rails).fill().map(row => []);
 
-  let firstRowLetterCount = Math.ceil(length / ((rows - 1) * 2))
-  let lastRowLetterCount = Math.floor(length / ((rows - 1) * 2))
-
-  for (let count = 1; count <= firstRowLetterCount; count++) {
-    resultRows[0].push(letters.shift());
-  }
-
-  for (let count = 1; count <= lastRowLetterCount; count++) {
-    resultRows[rows - 1].unshift(letters.pop());
-  }
-
-
-  let remainingLength = letters.length;
-  let remainingRows = rows - 2;
-  let lettersPerRow = remainingLength / remainingRows;
-
-  for (let row = 1; row < rows - 1; row++) {
-    resultRows[row] = letters.splice(0, lettersPerRow);
-  }
-
-  let row = 0;
-  let directionUp = false;
-
-  let decoded =  msg.split('').map((letter) => {
-    let currentLetter = resultRows[row].shift();
-
-    directionUp ? row -= 1 : row += 1;
-    if (row === 0) {
-      directionUp = false;
-    } else if (row === rows - 1) {
-      directionUp = true;
+  for (let row = 0; row < rails; row++) {
+    for (let i = (rails*2-2); i <= length + (rails*2-2); i += (rails*2-2)) {
+      let difference = (rails*2-2) - row;
+      let currentIdx = i - row;
+      let previousIdx = i - difference;
+      if (previousIdx < length) indexes[row].push(previousIdx);
+      if (currentIdx < length) indexes[row].push(currentIdx);
     }
+  }
 
-    return currentLetter;
-  }).join('');
+  let correctIndexes = [... new Set(indexes.flat())];
+  let decoded = [];
+  correctIndexes.forEach((idx, idx2) => decoded[idx] = letters[idx2]);
 
-  return decoded;
+  return decoded.join('');
 }
+
 
 
 // console.log(railCipherDecode('WECRLTEERDSOEEFEAOCAIVDEN', 3)); // 'WEAREDISCOVEREDFLEEATONCE'
@@ -437,9 +467,7 @@ console.log(railCipherDecode('sikrtce', 2)  === 'sticker');
 console.log(railCipherDecode('hoell', 3) === 'hello');
 console.log(railCipherDecode('srteikc', 4)  === 'sticker');
 
-// couldn't pass
-
-console.log(railCipherDecode('helol', 4));
-console.log(railCipherDecode('hello', 5));
-console.log(railCipherDecode('moon', 4));
-console.log(railCipherDecode('sktceir', 3) )// === 'sticker');
+console.log(railCipherDecode('helol', 4) === 'hello');
+console.log(railCipherDecode('hello', 5) === 'hello');
+console.log(railCipherDecode('moon', 4) === 'moon');
+console.log(railCipherDecode('sktceir', 3) === 'sticker');
